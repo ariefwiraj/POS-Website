@@ -1,0 +1,42 @@
+{
+  "name": "pos-website",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.5.0",
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.46.1",
+    "class-variance-authority": "^0.7.0",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.11.17",
+    "html2canvas-pro": "^1.5.8",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^0.460.0",
+    "next": "^15.0.3",
+    "next-themes": "^0.4.3",
+    "react": "^19.0.0-rc-66a619b8e0-20241022",
+    "react-dom": "^19.0.0-rc-66a619b8e0-20241022",
+    "shadcn": "^4.8.0",
+    "sonner": "^1.7.0",
+    "tailwind-merge": "^2.5.4",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0-alpha.30",
+    "@types/node": "^20.14.9",
+    "@types/react": "^19.0.0-rc-66a619b8e0-20241022",
+    "@types/react-dom": "^19.0.0-rc-66a619b8e0-20241022",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^15.0.3",
+    "postcss": "^8.4.49",
+    "tailwindcss": "^4.0.0-alpha.30",
+    "tw-animate-css": "^1.0.1",
+    "typescript": "^5.6.3"
+  }
+}
