@@ -6,12 +6,12 @@ import { PosHistoryFilter } from '@/features/pos/components/history/PosHistoryFi
 import { PosHistorySummary } from '@/features/pos/components/history/PosHistorySummary'
 import { PosTransaction } from '@/features/pos/types/pos.types'
 
+import { useTransactionStore } from '@/stores/transactionStore'
+
 const DUMMY_HISTORY: PosTransaction[] = [
   { id: '1', invoice_number: 'INV-20260527-1001', total_price: 150000, payment_method: 'cash', created_at: '2026-05-27T10:30:00Z' },
   { id: '2', invoice_number: 'INV-20260527-1002', total_price: 45000, payment_method: 'qris', created_at: '2026-05-27T11:15:00Z' },
   { id: '3', invoice_number: 'INV-20260527-1003', total_price: 320000, payment_method: 'transfer', created_at: '2026-05-27T14:20:00Z' },
-  { id: '4', invoice_number: 'INV-20260526-1004', total_price: 75000, payment_method: 'cash', created_at: '2026-05-26T09:10:00Z' },
-  { id: '5', invoice_number: 'INV-20260526-1005', total_price: 125000, payment_method: 'cash', created_at: '2026-05-26T16:45:00Z' },
 ]
 
 export default function HistoryPage() {
@@ -19,9 +19,23 @@ export default function HistoryPage() {
   const [method, setMethod] = useState('')
   const [date, setDate] = useState('')
 
-  const filteredData = DUMMY_HISTORY.filter(tx => {
+  const { transactions } = useTransactionStore()
+
+  // Gabungkan data dari store (real/mock) dengan dummy jika kosong, 
+  // atau hanya tampilkan data dari store. Kita akan memprioritaskan data dari store.
+  const historyData: PosTransaction[] = transactions.length > 0 
+    ? transactions.map(tx => ({
+        id: tx.id,
+        invoice_number: tx.id,
+        total_price: tx.totalPrice,
+        payment_method: tx.paymentMethod as any,
+        created_at: tx.date
+      }))
+    : DUMMY_HISTORY;
+
+  const filteredData = historyData.filter(tx => {
     const matchSearch = tx.invoice_number.toLowerCase().includes(search.toLowerCase())
-    const matchMethod = method ? tx.payment_method === method : true
+    const matchMethod = method && method !== 'all' ? tx.payment_method === method : true
     const matchDate = date ? tx.created_at.startsWith(date) : true
     return matchSearch && matchMethod && matchDate
   })

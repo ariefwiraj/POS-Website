@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import { posTransactionService } from '../services/posTransactionService'
 import { usePosCartStore } from '@/stores/posCartStore'
+import { useTransactionStore } from '@/stores/transactionStore'
+import { useAuthStore } from '@/stores/authStore'
 import { toast } from 'sonner'
 
 export function usePosTransaction() {
@@ -10,6 +12,8 @@ export function usePosTransaction() {
   const [successData, setSuccessData] = useState<{ invoiceNumber: string, change: number } | null>(null)
   
   const { items, getTotalPrice, paymentMethod, cashReceived, getChange, clearCart } = usePosCartStore()
+  const { addTransaction } = useTransactionStore()
+  const { currentUser } = useAuthStore()
 
   const processCheckout = async () => {
     if (items.length === 0) {
@@ -48,6 +52,17 @@ export function usePosTransaction() {
         await new Promise(resolve => setTimeout(resolve, 1000))
         const date = new Date()
         invoice = `INV-${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}-MOCK`
+        
+        // Save to local storage mock backend
+        addTransaction({
+          id: invoice,
+          items,
+          totalPrice: getTotalPrice(),
+          paymentMethod,
+          cashReceived,
+          change: changeAmount,
+          cashierName: currentUser?.name || 'Kasir (Demo)',
+        })
       }
 
       setSuccessData({ invoiceNumber: invoice, change: changeAmount })

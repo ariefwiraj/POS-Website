@@ -14,7 +14,8 @@ export const DigitalReceipt = forwardRef<HTMLDivElement, DigitalReceiptProps>(
     return (
       <div 
         ref={ref}
-        className="bg-white text-black p-4 w-[300px] mx-auto font-mono text-sm leading-tight shadow-md receipt-print border border-border"
+        id="print-receipt" // 👇 Tambahkan ID ini untuk penanda saat print
+        className="bg-white text-black p-2 w-[260px] mx-auto font-mono text-xs leading-tight receipt-print"
         style={{ fontFamily: "'Courier New', Courier, monospace" }}
       >
         <div className="text-center mb-4">
@@ -37,7 +38,7 @@ export const DigitalReceipt = forwardRef<HTMLDivElement, DigitalReceiptProps>(
         <div className="border-b border-dashed border-gray-400 pb-2 mb-2 space-y-2">
           {items.map((item, idx) => (
             <div key={idx} className="flex flex-col text-xs">
-              <span className="truncate">{item.name}</span>
+              <span className="truncate pr-2">{item.name}</span>
               <div className="flex justify-between">
                 <span>{item.quantity} x {item.price.toLocaleString('id-ID')}</span>
                 <span>{(item.quantity * item.price).toLocaleString('id-ID')}</span>

@@ -21,7 +21,8 @@ export function PosCart({ className, onCheckout }: PosCartProps) {
     decrementQuantity, 
     removeItem, 
     getTotalPrice,
-    getTotalItems
+    getTotalItems,
+    updateQuantity
   } = usePosCartStore()
   
   const { setMobileCartOpen } = usePosUiStore()
@@ -63,6 +64,7 @@ export function PosCart({ className, onCheckout }: PosCartProps) {
                   onIncrement={() => incrementQuantity(item.productId)}
                   onDecrement={() => decrementQuantity(item.productId)}
                   onRemove={() => removeItem(item.productId)}
+                  onUpdateQuantity={(quantity) => updateQuantity(item.productId, quantity)}
                 />
               ))}
             </AnimatePresence>

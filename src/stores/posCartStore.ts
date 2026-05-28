@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export interface PosCartItem {
   productId: string
@@ -30,7 +31,9 @@ interface PosCartStore {
   getChange: () => number
 }
 
-export const usePosCartStore = create<PosCartStore>((set, get) => ({
+export const usePosCartStore = create<PosCartStore>()(
+  persist(
+    (set, get) => ({
   items: [],
   paymentMethod: 'cash',
   cashReceived: 0,
@@ -97,4 +100,9 @@ export const usePosCartStore = create<PosCartStore>((set, get) => ({
   getTotalPrice: () => get().items.reduce((total, item) => total + (item.price * item.quantity), 0),
   
   getChange: () => Math.max(0, get().cashReceived - get().getTotalPrice()),
-}))
+    }),
+    {
+      name: 'pos-cart-storage',
+    }
+  )
+)
