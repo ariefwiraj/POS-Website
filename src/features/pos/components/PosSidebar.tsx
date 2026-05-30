@@ -13,6 +13,8 @@ export function PosSidebar() {
   const { sidebarCollapsed, toggleSidebar } = usePosUiStore()
   const logout = useAuthStore(state => state.logout)
 
+  const currentUser = useAuthStore(state => state.currentUser)
+
   const handleLogout = () => {
     logout()
     router.push('/login')
@@ -22,6 +24,18 @@ export function PosSidebar() {
     { name: 'Kasir', href: '/pos', icon: ShoppingCart },
     { name: 'Riwayat Transaksi', href: '/pos/history', icon: ReceiptText },
   ]
+
+  // Get initials for avatar (e.g. Arief Wira -> AW)
+  const getInitials = (name: string) => {
+    if (!name) return 'U'
+    return name
+      .trim()
+      .split(/\s+/)
+      .map(part => part[0])
+      .join('')
+      .substring(0, 2)
+      .toUpperCase()
+  }
 
   return (
     <aside className={cn(
@@ -103,8 +117,8 @@ export function PosSidebar() {
         })}
       </nav>
 
-      {/* Bottom links */}
-      <div className="border-t border-sidebar-border p-4 space-y-2 shrink-0 overflow-hidden">
+      {/* Admin Link Section */}
+      <div className="border-t border-sidebar-border p-4 shrink-0 overflow-hidden">
         <Link
           href="/admin"
           className={cn(
@@ -120,20 +134,47 @@ export function PosSidebar() {
             Admin
           </span>
         </Link>
+      </div>
+
+      {/* User Info & Logout Section */}
+      <div 
+        className={cn(
+          "border-t border-sidebar-border p-4 flex overflow-hidden shrink-0",
+          sidebarCollapsed ? "flex-col items-center gap-4" : "items-center justify-between"
+        )}
+      >
+        <div 
+          className="flex items-center gap-3 min-w-0"
+          title={sidebarCollapsed ? (currentUser?.name || 'Arief Wira') : undefined}
+        >
+          {/* Avatar Circle */}
+          <div className="w-9 h-9 rounded-full bg-neutral-700 flex items-center justify-center text-white text-sm font-semibold shrink-0 select-none shadow-sm">
+            {currentUser?.name ? getInitials(currentUser.name) : 'AW'}
+          </div>
+          
+          {/* User Details */}
+          {!sidebarCollapsed && (
+            <div className="flex flex-col min-w-0">
+              <span className="font-sans font-semibold text-sm text-sidebar-foreground truncate leading-normal">
+                {currentUser?.name || 'Arief Wira'}
+              </span>
+              <span className="font-sans text-xs text-sidebar-foreground opacity-70 mt-0.5 leading-none truncate">
+                {currentUser?.email || 'admin@pos.com'}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Logout Button */}
         <button
           onClick={handleLogout}
           className={cn(
-            "w-full flex items-center rounded-lg py-2.5 px-[14px] transition-all duration-300 ease-[cubic-bezier(0.3,0,0,1)] hover:bg-destructive hover:text-destructive-foreground text-sidebar-foreground overflow-hidden cursor-pointer"
+            "text-sidebar-foreground opacity-70 hover:opacity-100 hover:text-destructive hover:bg-destructive/10 rounded-md transition-colors shrink-0",
+            sidebarCollapsed ? "p-2 w-9 h-9 flex items-center justify-center" : "p-2"
           )}
-          title={sidebarCollapsed ? "Logout" : undefined}
+          title="Logout"
         >
-          <LogOut className="h-5 w-5 shrink-0" />
-          <span className={cn(
-            "font-sans font-medium text-sm transition-all duration-300 ease-[cubic-bezier(0.3,0,0,1)] whitespace-nowrap block ml-3",
-            sidebarCollapsed ? "opacity-0 pointer-events-none" : "opacity-100"
-          )}>
-            Logout
-          </span>
+          <LogOut className="w-5 h-5" />
         </button>
       </div>
     </aside>
