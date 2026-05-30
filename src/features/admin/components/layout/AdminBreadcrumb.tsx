@@ -15,7 +15,7 @@ import React from 'react';
 
 const routeNameMap: Record<string, string> = {
   admin: 'Dashboard',
-  products: 'Produk',
+  products: 'Katalog & Stok',
   categories: 'Kategori',
   stock: 'Stok',
   orders: 'Pesanan',
@@ -63,6 +63,7 @@ export const AdminBreadcrumb = () => {
           
           // Try to get a friendly name, or use the raw path if it's an ID
           const friendlyName = routeNameMap[path] || (path.length > 15 ? 'Detail' : path);
+          const isLinkable = !!routeNameMap[path];
 
           return (
             <React.Fragment key={path}>
@@ -74,10 +75,14 @@ export const AdminBreadcrumb = () => {
                   <BreadcrumbPage className="font-semibold text-slate-800 capitalize">
                     {friendlyName}
                   </BreadcrumbPage>
-                ) : (
+                ) : isLinkable ? (
                   <BreadcrumbLink asChild>
                     <Link href={href} className="capitalize">{friendlyName}</Link>
                   </BreadcrumbLink>
+                ) : (
+                  <BreadcrumbPage className="capitalize text-slate-400 font-normal">
+                    {friendlyName}
+                  </BreadcrumbPage>
                 )}
               </BreadcrumbItem>
             </React.Fragment>

@@ -39,9 +39,8 @@ export const AdminSidebar = () => {
         </AdminSidebarGroup>
 
         <AdminSidebarGroup label="Kelola Toko">
-          <AdminSidebarItem label="Produk" href="/admin/products" icon={Package} />
+          <AdminSidebarItem label="Katalog & Stok" href="/admin/products" icon={Package} badge={3} />
           <AdminSidebarItem label="Kategori" href="/admin/categories" icon={FolderTree} />
-          <AdminSidebarItem label="Stok" href="/admin/stock" icon={Warehouse} badge={3} />
         </AdminSidebarGroup>
 
         <AdminSidebarGroup label="Transaksi">

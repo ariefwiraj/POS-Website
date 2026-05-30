@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { UploadCloud, X } from 'lucide-react';
@@ -96,10 +96,23 @@ export const ProductForm = ({ initialData, onSubmit, isLoading }: ProductFormPro
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Harga (Rp) <span className="text-red-500">*</span></label>
-              <Input 
-                type="number" 
-                {...form.register('price')} 
-                className={form.formState.errors.price ? 'border-red-500' : ''}
+              <Controller
+                control={form.control}
+                name="price"
+                render={({ field: { value, onChange, ...fieldProps } }) => (
+                  <Input 
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0"
+                    {...fieldProps}
+                    value={value === 0 || value === '' ? '' : Number(value).toLocaleString('id-ID')}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, '');
+                      onChange(raw === '' ? '' : parseInt(raw, 10));
+                    }}
+                    className={form.formState.errors.price ? 'border-red-500' : ''}
+                  />
+                )}
               />
               {form.formState.errors.price && (
                 <p className="text-sm text-red-500">{form.formState.errors.price.message}</p>
@@ -108,10 +121,23 @@ export const ProductForm = ({ initialData, onSubmit, isLoading }: ProductFormPro
 
             <div className="space-y-2">
               <label className="text-sm font-semibold text-slate-700">Stok Awal <span className="text-red-500">*</span></label>
-              <Input 
-                type="number" 
-                {...form.register('stock')} 
-                className={form.formState.errors.stock ? 'border-red-500' : ''}
+              <Controller
+                control={form.control}
+                name="stock"
+                render={({ field: { value, onChange, ...fieldProps } }) => (
+                  <Input 
+                    type="text"
+                    inputMode="numeric"
+                    placeholder="0"
+                    {...fieldProps}
+                    value={value === 0 || value === '' ? '' : Number(value).toLocaleString('id-ID')}
+                    onChange={(e) => {
+                      const raw = e.target.value.replace(/\D/g, '');
+                      onChange(raw === '' ? '' : parseInt(raw, 10));
+                    }}
+                    className={form.formState.errors.stock ? 'border-red-500' : ''}
+                  />
+                )}
               />
               {form.formState.errors.stock && (
                 <p className="text-sm text-red-500">{form.formState.errors.stock.message}</p>

@@ -59,9 +59,8 @@ export const MobileSidebarSheet = () => {
                 <h4 className="text-[11px] font-bold tracking-wider text-slate-400 uppercase">Kelola Toko</h4>
               </div>
               <div className="space-y-1 px-2">
-                <MobileSidebarItem label="Produk" href="/admin/products" icon={Package} onClick={() => setMobileSidebarOpen(false)} />
+                <MobileSidebarItem label="Katalog & Stok" href="/admin/products" icon={Package} badge={3} onClick={() => setMobileSidebarOpen(false)} />
                 <MobileSidebarItem label="Kategori" href="/admin/categories" icon={FolderTree} onClick={() => setMobileSidebarOpen(false)} />
-                <MobileSidebarItem label="Stok" href="/admin/stock" icon={Warehouse} badge={3} onClick={() => setMobileSidebarOpen(false)} />
               </div>
             </div>
 
