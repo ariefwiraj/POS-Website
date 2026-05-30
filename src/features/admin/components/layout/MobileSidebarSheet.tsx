@@ -9,6 +9,8 @@ import { AdminSidebarGroup } from './AdminSidebarGroup';
 import { AdminSidebarItem } from './AdminSidebarItem';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden'; // Optional if we want to hide title properly
 
+import { usePathname } from 'next/navigation';
+
 export const MobileSidebarSheet = () => {
   const { mobileSidebarOpen, setMobileSidebarOpen } = useAdminUiStore();
 
@@ -107,14 +109,23 @@ export const MobileSidebarSheet = () => {
 };
 
 function MobileSidebarItem({ label, href, icon: Icon, badge, onClick }: { label: string, href: string, icon: any, badge?: number, onClick: () => void }) {
-  // Simplification for mobile view
+  const pathname = usePathname();
+  const isActive = href === '/admin' 
+    ? pathname === '/admin' 
+    : pathname === href || pathname.startsWith(`${href}/`);
+
   return (
     <Link
       href={href}
       onClick={onClick}
-      className="flex items-center gap-3 px-3 py-2 rounded-md transition-colors text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+      className={cn(
+        "flex items-center gap-3 px-3 py-2 rounded-md transition-colors group",
+        isActive 
+          ? "bg-[#7AAACE]/10 text-[#355872] font-medium" 
+          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
+      )}
     >
-      <Icon className="w-5 h-5 text-slate-500" />
+      <Icon className={cn("w-5 h-5", isActive ? "text-[#355872]" : "text-slate-500 group-hover:text-slate-700")} />
       <span className="flex-1 truncate">{label}</span>
       {badge !== undefined && badge > 0 && (
         <span className="bg-red-100 text-red-600 text-xs font-semibold px-2 py-0.5 rounded-full min-w-5 text-center">

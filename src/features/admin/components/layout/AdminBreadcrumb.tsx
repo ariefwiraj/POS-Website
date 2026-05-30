@@ -2,7 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -27,36 +27,15 @@ const routeNameMap: Record<string, string> = {
 
 export const AdminBreadcrumb = () => {
   const pathname = usePathname();
-  
-  if (pathname === '/admin') {
-    return (
-      <Breadcrumb>
-        <BreadcrumbList>
-          <BreadcrumbItem>
-            <BreadcrumbPage className="font-semibold text-slate-800 flex items-center gap-2">
-              <Home className="w-4 h-4" />
-              Dashboard
-            </BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
-    );
-  }
-
   const paths = pathname.split('/').filter(p => p !== '' && p !== 'admin');
   
+  if (pathname === '/admin' || paths.length === 0) {
+    return null;
+  }
+
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink asChild>
-            <Link href="/admin" className="flex items-center gap-2">
-              <Home className="w-4 h-4" />
-              <span className="hidden sm:inline">Dashboard</span>
-            </Link>
-          </BreadcrumbLink>
-        </BreadcrumbItem>
-        
         {paths.map((path, index) => {
           const isLast = index === paths.length - 1;
           const href = `/admin/${paths.slice(0, index + 1).join('/')}`;
@@ -67,9 +46,11 @@ export const AdminBreadcrumb = () => {
 
           return (
             <React.Fragment key={path}>
-              <BreadcrumbSeparator>
-                <ChevronRight className="w-4 h-4" />
-              </BreadcrumbSeparator>
+              {index > 0 && (
+                <BreadcrumbSeparator>
+                  <ChevronRight className="w-4 h-4" />
+                </BreadcrumbSeparator>
+              )}
               <BreadcrumbItem>
                 {isLast ? (
                   <BreadcrumbPage className="font-semibold text-slate-800 capitalize">

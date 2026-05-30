@@ -16,7 +16,9 @@ interface AdminSidebarItemProps {
 
 export const AdminSidebarItem = ({ label, href, icon: Icon, badge }: AdminSidebarItemProps) => {
   const pathname = usePathname();
-  const isActive = pathname === href || pathname.startsWith(`${href}/`);
+  const isActive = href === '/admin' 
+    ? pathname === '/admin' 
+    : pathname === href || pathname.startsWith(`${href}/`);
   const { sidebarExpanded } = useAdminUiStore();
 
   const content = (
@@ -49,10 +51,6 @@ export const AdminSidebarItem = ({ label, href, icon: Icon, badge }: AdminSideba
         </span>
       )}
       
-      {/* Active Indicator Line */}
-      {isActive && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-[#7AAACE] rounded-r-md" />
-      )}
     </Link>
   );
 
