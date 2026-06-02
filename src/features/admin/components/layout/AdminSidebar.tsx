@@ -1,5 +1,6 @@
 'use client';
 
+import { createContext, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Store, LayoutDashboard, Package, FolderTree, Warehouse, ShoppingCart, CreditCard, BarChart3, Monitor, LogOut } from 'lucide-react';
 import { useAdminUiStore } from '@/stores/adminUiStore';
@@ -7,16 +8,26 @@ import { cn } from '@/lib/utils';
 import { AdminSidebarGroup } from './AdminSidebarGroup';
 import { AdminSidebarItem } from './AdminSidebarItem';
 
-export const AdminSidebar = () => {
-  const { sidebarExpanded } = useAdminUiStore();
+export const SidebarContext = createContext({ sidebarExpanded: true });
+
+export const AdminSidebar = ({ initialSidebarExpanded }: { initialSidebarExpanded?: boolean }) => {
+  const { sidebarExpanded: storeExpanded } = useAdminUiStore();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const sidebarExpanded = mounted ? storeExpanded : (initialSidebarExpanded ?? true);
 
   return (
-    <aside
-      className={cn(
-        "hidden md:flex flex-col bg-white border-r border-slate-200 h-screen sticky top-0 transition-all duration-200 ease-in-out z-20",
-        sidebarExpanded ? "w-[260px]" : "w-[72px]"
-      )}
-    >
+    <SidebarContext.Provider value={{ sidebarExpanded }}>
+      <aside
+        className={cn(
+          "hidden md:flex flex-col bg-white border-r border-slate-200 h-screen sticky top-0 transition-all duration-200 ease-in-out z-20",
+          sidebarExpanded ? "w-[260px]" : "w-[72px]"
+        )}
+      >
       {/* Logo Area */}
       <div className="h-16 flex items-center justify-center border-b border-slate-200 px-4 shrink-0">
         <Link href="/admin" className="flex items-center gap-3 w-full justify-center">
@@ -74,5 +85,6 @@ export const AdminSidebar = () => {
         </div>
       </div>
     </aside>
+    </SidebarContext.Provider>
   );
 };

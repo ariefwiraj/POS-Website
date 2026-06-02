@@ -1,13 +1,38 @@
-import { ReactNode } from 'react';
+'use client';
+
+import { ReactNode, useEffect, useRef } from 'react';
 import { AdminSidebar } from './AdminSidebar';
 import { AdminHeader } from './AdminHeader';
 import { MobileSidebarSheet } from './MobileSidebarSheet';
+import { useAdminUiStore } from '@/stores/adminUiStore';
 
-export const AdminLayout = ({ children }: { children: ReactNode }) => {
+export const AdminLayout = ({ 
+  children,
+  initialSidebarExpanded
+}: { 
+  children: ReactNode,
+  initialSidebarExpanded: boolean
+}) => {
+  // Synchronously set initial state in Zustand store during the render phase (runs on both Server and Client)
+  const initialized = useRef(false);
+  if (!initialized.current) {
+    useAdminUiStore.setState({ sidebarExpanded: initialSidebarExpanded });
+    initialized.current = true;
+  }
+
+  const { setSidebarExpanded } = useAdminUiStore();
+
+  useEffect(() => {
+    const saved = localStorage.getItem('admin-sidebar-expanded');
+    if (saved !== null) {
+      setSidebarExpanded(saved === 'true');
+    }
+  }, [setSidebarExpanded]);
+
   return (
     <div className="flex h-screen bg-[#F7F8F0] text-slate-900 font-sans overflow-hidden">
       {/* Desktop Sidebar */}
-      <AdminSidebar />
+      <AdminSidebar initialSidebarExpanded={initialSidebarExpanded} />
       
       {/* Mobile Sidebar */}
       <MobileSidebarSheet />

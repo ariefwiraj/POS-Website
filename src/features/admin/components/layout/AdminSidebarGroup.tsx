@@ -1,8 +1,8 @@
 'use client';
 
-import { ReactNode } from 'react';
-import { useAdminUiStore } from '@/stores/adminUiStore';
+import { ReactNode, useContext } from 'react';
 import { cn } from '@/lib/utils';
+import { SidebarContext } from './AdminSidebar';
 
 interface AdminSidebarGroupProps {
   label: string;
@@ -10,7 +10,7 @@ interface AdminSidebarGroupProps {
 }
 
 export const AdminSidebarGroup = ({ label, children }: AdminSidebarGroupProps) => {
-  const { sidebarExpanded } = useAdminUiStore();
+  const { sidebarExpanded } = useContext(SidebarContext);
 
   return (
     <div className="mb-6 last:mb-0">

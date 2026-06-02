@@ -13,7 +13,20 @@ export const useAdminUiStore = create<AdminUiStore>((set) => ({
   sidebarExpanded: true,
   mobileSidebarOpen: false,
   
-  toggleSidebar: () => set((state) => ({ sidebarExpanded: !state.sidebarExpanded })),
-  setSidebarExpanded: (expanded: boolean) => set({ sidebarExpanded: expanded }),
+  toggleSidebar: () => set((state) => {
+    const next = !state.sidebarExpanded;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin-sidebar-expanded', String(next));
+      document.cookie = `admin-sidebar-expanded=${next}; path=/; max-age=31536000`;
+    }
+    return { sidebarExpanded: next };
+  }),
+  setSidebarExpanded: (expanded: boolean) => set(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin-sidebar-expanded', String(expanded));
+      document.cookie = `admin-sidebar-expanded=${expanded}; path=/; max-age=31536000`;
+    }
+    return { sidebarExpanded: expanded };
+  }),
   setMobileSidebarOpen: (open: boolean) => set({ mobileSidebarOpen: open }),
 }));
